@@ -28,7 +28,7 @@
             <h1>Media Control Center</h1>
         </div>
         <div class="col-md-6">
-            <?= var_dump($this) ?>
+
         </div>
     </div>
 </div>
