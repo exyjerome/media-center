@@ -15,15 +15,14 @@ Controllers are currently extremely basic with some basic methods, you should al
 
 Put them in `views/` -- for example, `views/homepage.html`
 
-You can then display this view from your controller with `$this->view('homepage');`
-
-Or you can do
+You can then display this view from your controller with 
 ```php
-$this->view('homepage', [
-    'title' => 'My App'
-]);
+$this->render('homepage');
 ```
-which makes the `$title` var available in the view.
+You can also set view variables with
+```php
+$this->view()->variable = 'value';
+```
 
 ### Routing
 
