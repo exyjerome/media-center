@@ -28,6 +28,22 @@ class Spotify extends Controller_Base {
         }
     }
 
+    public function Skip ()
+    {
+        if ($token = Session::read('accessToken')) {
+           $this->api->setAccessToken($token);
+           $this->api->next();
+        }
+    }
+
+    public function Previous ()
+    {
+        if ($token = Session::read('accessToken')) {
+           $this->api->setAccessToken($token);
+           $this->api->previous();
+        }
+    }
+
     public function LoginUrl ()
     {
         $options = [

@@ -7,7 +7,7 @@
             <a href="<?= $this->spotify ?>" class="btn btn-success">
                 Login with Spotify
             </a>
-            <a data-action="" class="btn btn-info">
+            <a data-action="previous" class="btn btn-info">
                 <i class="fa fa-step-backward"></i>
             </a>
             <a data-action="play" class="btn btn-success">
@@ -16,7 +16,7 @@
             <a data-action="pause" class="btn btn-danger">
                 <i class="fa fa-stop"></i>
             </a>
-            <a class="btn btn-info">
+            <a data-action="skip" class="btn btn-info">
                 <i class="fa fa-step-forward"></i>
             </a>
         </div>

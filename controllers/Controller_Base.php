@@ -95,8 +95,7 @@ class Controller_Base {
         if (isset($this->{$param})) {
             return $this->{$param};
         }
-        // return $this->template->get($param);
-        var_dump($this->template);
+        return $this->template->get($param);
     }
 
     public function call ($controller, $method)
