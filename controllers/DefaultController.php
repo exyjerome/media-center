@@ -1,48 +1,44 @@
 <?php
-
-class Template {
-    public function __construct ()
-    {
-        @$this->variables = new \stdClass();
-    }
-    public function get($key)
-    {
-        if (isset($this->variables->{$key})) {
-            return $this->variables->{$key};
-        } else {
-            return '';
-        }
-    }
-    public function __set ($key, $value)
-    {
-        $this->variables->{$key} = $value;
-    }
-
-}
-
-class Controller_Base {
+/**
+ * 
+ * Base Controller , needs to be separated.
+ * 
+ */
+class DefaultController {
 
     public function __construct () 
     {
         Session::start();
-        $this->GET = new \stdClass();
         $this->PAGE = new \stdClass();
-        $this->template = new \Template();
-        $this->session = new SpotifyWebAPI\Session(
-            '3c6c1a3c78c0483bb84e968c4999ae63',
-            'ba245a2fde4c48a5a8b3a525847b20fc',
-            'http://localhost/spotify/login'
-        );
-        $this->api = new SpotifyWebAPI\SpotifyWebAPI();
+        $this->view = new \View();
+        $this->GET();
+        $this->POST();
     }
 
     public function GET ()
     {
+        if ($this->GET) {
+            return $this->GET;
+        }
+        $this->GET = new \stdClass();
         foreach ($_GET as $k => $v) {
             if (isset($this->GET->{$k})) continue;
             @$this->GET->{$k} = $v;
         }
         return $this->GET;
+    }
+
+    public function POST ()
+    {
+        if ($this->POST) {
+            return $this->POST;
+        }
+        $this->POST = new \stdClass();
+        foreach ($_POST as $k => $v) {
+            if (isset($this->POST->{$k})) continue;
+            @$this->POST->{$k} = $v;
+        }
+        return $this->POST;
     }
 
     public function partial ($controller_method)
@@ -72,17 +68,34 @@ class Controller_Base {
 
     public function view ()
     {
-        return $this->template;
+        return $this->view;
+    }
+
+    public function renderGroup ($views)
+    {
+        $class = get_class($this);
+        foreach ($views as $view) {
+            $file   = __DIR__ . '/../views/' . $class . '/' . $view . '.php';
+            if (true == file_exists($file)) {
+                ob_start();
+                    include $file;
+                    $compiled = ob_get_contents();
+                ob_end_clean();
+                print $compiled;
+            }
+        }
     }
 
     public function render ($name, $additional = false)
     {
-        if (true == file_exists(__DIR__ . './../views/' . $name . '.php')) {
+        $class = get_class($this);
+        $file   = __DIR__ . '/../views/' . $class . '/' . $name . '.php';
+        if (true == file_exists($file)) {
             if (false != $additional) {
                 extract($additional);
             }
             ob_start();
-                include __DIR__ . './../views/' . $name . '.php';
+                include $file;
                 $compiled = ob_get_contents();
             ob_end_clean();
             print $compiled;
@@ -95,7 +108,7 @@ class Controller_Base {
         if (isset($this->{$param})) {
             return $this->{$param};
         }
-        return $this->template->get($param);
+        return $this->view->get($param);
     }
 
     public function call ($controller, $method)
